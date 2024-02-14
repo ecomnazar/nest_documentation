@@ -3,17 +3,22 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
   Put,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { CatsService } from './cats.service';
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatsService) {}
   @Get()
-  getAll() {
-    return `This action calls all cats`;
+  getAll(@Res() res: Response) {
+    res.status(HttpStatus.OK).json([]);
   }
 
   @Get(':id')
@@ -22,8 +27,8 @@ export class CatsController {
   }
 
   @Post()
-  create(@Body() createCatDto: any) {
-    return `This action adds a new cat ${createCatDto}`;
+  create(@Body() body: any) {
+    this.catsService.create(body);
   }
 
   @Put(':id')
